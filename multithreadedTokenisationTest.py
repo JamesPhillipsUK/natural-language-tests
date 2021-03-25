@@ -3,15 +3,17 @@ multithreadedTokenisationTest.py
 
 Testing the effects of multithreading on the efficiency of word tokenisation with multiple large texts.
 
+Sample Data used: The King James Version of the Bible, courtesy of Project Gutenberg.
+                  The Complete Works of William Shakespeare, courtesy of Project Gutenberg.
+                  HG Wells: The Time Machine, courtesy of Project Gutenberg.
+                  Victor Hugo: Les Miserables, courtesy of Project Gutenberg.
+
 Authors
 -------
   Jesse Phillips <james@jamesphillipsuk.com>
 
 """
-# Sample Data used: The King James Version of the Bible, courtesy of Project Gutenberg.       #
-#                   The Complete Works of William Shakespeare, courtesy of Project Gutenberg. #
-#                   HG Wells: The Time Machine, courtesy of Project Gutenberg.                #
-#                   Victor Hugo: Les Miserables, courtesy of Project Gutenberg.               #
+
 
 import nltk # Natural Language Processing Toolkit
 import urllib.request # Python Website Crawler
