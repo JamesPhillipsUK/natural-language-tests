@@ -1,4 +1,13 @@
-# Experiment in multithreading to increase efficiency of word tokenisation.                   #
+"""
+multithreadedTokenisationTest.py
+
+Testing the effects of multithreading on the efficiency of word tokenisation with multiple large texts.
+
+Authors
+-------
+  Jesse Phillips <james@jamesphillipsuk.com>
+
+"""
 # Sample Data used: The King James Version of the Bible, courtesy of Project Gutenberg.       #
 #                   The Complete Works of William Shakespeare, courtesy of Project Gutenberg. #
 #                   HG Wells: The Time Machine, courtesy of Project Gutenberg.                #
@@ -13,7 +22,7 @@ import multiprocessing # multithreading
 # nltk.download() # Open NLTK package Downloader
 
 def tokeniseText(text):
-  '''
+  """
   This method, given a text string containing words, will attempt to tokenise it using NLTK.
   
   Parameters
@@ -25,7 +34,7 @@ def tokeniseText(text):
   -------
   list
     The list of tokenised words.
-  '''
+  """
   tokens = nltk.tokenize.word_tokenize(text) # Tokenise the text
   # Strip out punctuation tokens
   tokItems = ["".join(j.lower() for j in i if j not in string.punctuation)
@@ -33,7 +42,7 @@ def tokeniseText(text):
   return tokItems
 
 def buildFrequencyDistributionData(tokItems):
-  '''
+  """
   This method, given a list of "word" data and corresponding frequencies, will plot a frequency graph of it using NLTK.
   
   Parameters
@@ -45,20 +54,20 @@ def buildFrequencyDistributionData(tokItems):
   -------
   FreqDist
     The frequency distribution plot.
-  '''
+  """
   freq = nltk.FreqDist(tokItems) # Build the frequency data
   # TODO: Draw the graphs overlapping.
   return freq
 
 def pullText():
-  '''
+  """
   This method uses urllib to pull the test data from Project Gutenberg's online repository.
     
   Returns
   -------
   list
     A list of all of the data from Project Gutenberg in string format.  We load all this straight into memory to save the overhead of grabbing it later.
-  '''
+  """
   kJV = urllib.request.urlopen(urllib.request.Request(url='https://www.gutenberg.org/files/10/10-0.txt', headers={'User-Agent': 'Mozilla/5.0'})) # get the text from the URL
   worksOfShakespeare = urllib.request.urlopen(urllib.request.Request(url='https://www.gutenberg.org/files/100/100-0.txt', headers={'User-Agent': 'Mozilla/5.0'}))
   theTimeMachine = urllib.request.urlopen(urllib.request.Request(url='https://www.gutenberg.org/files/35/35-0.txt', headers={'User-Agent': 'Mozilla/5.0'}))
@@ -66,14 +75,14 @@ def pullText():
   return [str(kJV.read()),str(worksOfShakespeare.read()),str(theTimeMachine.read()),str(lesMis.read())]
   
 def runTests(sampleData):
-  '''
+  """
   This method times and runs the two tests: tokenisation and frequency distribution.
   
   Parameters
   ----------
   sampleData: string
     The test data to run the tests on.
-  '''
+  """
   startTime = time.time()
   tokenisedItems = tokeniseText(sampleData)
   print ("  Tokenisation time: \t", time.time() - startTime)
@@ -83,12 +92,12 @@ def runTests(sampleData):
 #  freq.plot(500, cumulative=False) # Plot a frequency graph (first 500 words)
 
 def main():
-  '''
+  """
   Entrypoint: gets the data then runs the tests.
   
   This runs the tests on a single thread, supervised by Python's GIL, then across the whole CPU using the multiprocessing library.
-  '''
-  sampleData = pullKJVText()
+  """
+  sampleData = pullText()
   print ("Single-threaded: ")
   startTime = time.time()
   for text in sampleData:
