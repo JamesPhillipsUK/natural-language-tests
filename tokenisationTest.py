@@ -1,33 +1,45 @@
-import nltk # Natural Language Processing Toolkit #
-import urllib.request # Python Website Crawler. #
-from bs4 import BeautifulSoup # Python HTML Disassembler. #
-import string # String lib - used to remove punctuation. #
-# nltk.download() # Open NLTK package Downloader. #
+"""
+tokenisationTest.py
 
-# get the page from the URL
-response = urllib.request.urlopen(urllib.request.Request(url='https://cy.wikipedia.org/wiki/COVID-19', headers={'User-Agent': 'Mozilla/5.0'}))
-# print(response.read())
+Testing word tokenisation of a large natural language text using NLTK.
 
-# parse it as HTML
-soup = BeautifulSoup(response.read(), 'html5lib')
+Sample Data used: https://cy.wikipedia.org/wiki/COVID-19
 
-# strip the contents of head, script, or style tags.
-for erroneousData in soup(["head", "script", "style"]):
-  erroneousData.extract()
+Authors
+-------
+  Jesse Phillips <james@jamesphillipsuk.com>
 
-# Get the text from the HTML
-text = soup.get_text(strip = True)
-# print(text)
+"""
+import nltk # Natural Language Processing Toolkit
+import urllib.request # Python Website Crawler
+from bs4 import BeautifulSoup # Python HTML Disassembler
+import string # String lib - used to remove punctuation
+# nltk.download() # Open NLTK package Downloader
+def main():
+  """
+  Entrypoint: runs the test.
+  
+  This runs NLTK's word tokenisation on a piece of natural language, and plots the resultant frequency data of words in the source material.
+  The source material for this is the Wikipedia article on COVID-19 in Welsh.
+  """
+  # get the page from the URL
+  response = urllib.request.urlopen(urllib.request.Request(url='https://cy.wikipedia.org/wiki/COVID-19', headers={'User-Agent': 'Mozilla/5.0'}))
+  soup = BeautifulSoup(response.read(), 'html5lib') # parse it as HTML
 
-# Tokenise the text
-tokens = nltk.tokenize.word_tokenize(text)
-# Strip out punctuation tokens
-tokItems = ["".join(j.lower() for j in i if j not in string.punctuation)
-  for i in tokens]
+  # strip the contents of head, script, or style tags.
+  for erroneousData in soup(["head", "script", "style"]):
+    erroneousData.extract()
 
-# Build the frequency data
-freq = nltk.FreqDist(tokItems)
-for key, value in freq.items():
-  print(str(key) + ':' + str(value))
-# Plot a requency graph
-freq.plot(cumulative=False)
+  text = soup.get_text(strip = True) # Get the text from the HTML
+  tokens = nltk.tokenize.word_tokenize(text) # Tokenise the text
+  # Strip out punctuation tokens
+  tokItems = ["".join(j.lower() for j in i if j not in string.punctuation)
+    for i in tokens]
+
+  freq = nltk.FreqDist(tokItems) # Build the frequency data
+  for key, value in freq.items():
+    print(str(key) + ':' + str(value))
+  freq.plot(cumulative=False) # Plot a frequency graph
+
+if __name__ == "__main__":
+  main()
