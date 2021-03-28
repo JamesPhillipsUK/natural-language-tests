@@ -17,7 +17,17 @@ from nltk.text import Text # Text class - methods for parsing a text.
 
 # nltk.download() # Open NLTK package Downloader
 
-def tokeniseText(text):
+def lexer(text):
+  # TODO: build lexical analyser
+  # SEE: https://github.com/gcc-mirror/gcc/blob/master/libcpp/lex.c
+  # SEE: https://gcc.gnu.org/onlinedocs/cppinternals/Lexer.html
+  textList = text.split(" ")
+  textList = [y  for x in textList for y in x.split('\n')]
+  textList = [y  for x in textList for y in x.split('{')]
+  textList = [y  for x in textList for y in x.split('}')]
+  return textList
+
+def tokeniseText(text, method):
   """
   This method, given a text string containing words, will attempt to tokenise it using NLTK.
   
@@ -31,10 +41,17 @@ def tokeniseText(text):
   list
     The list of tokenised words.
   """
-  tokens = nltk.tokenize.word_tokenize(text) # Tokenise the text
-  # Strip out punctuation tokens
-  tokItems = ["".join(j.lower() for j in i if j not in string.punctuation)
-    for i in tokens]
+  tokItems = []
+  if (method == "word_native"):
+    tokens = nltk.tokenize.word_tokenize(text) # Tokenise the text
+    # Strip out punctuation tokens
+    tokItems = ["".join(j.lower() for j in i if j not in string.punctuation)
+      for i in tokens]
+  elif (method == "word_naive_with_spaces"):
+    tokItems = text.split(" ")
+  elif (method == "lexical_analysis"):
+    tokItems = lexer(text)
+    
   return tokItems
 
 def buildFrequencyDistributionData(tokItems):
@@ -76,8 +93,9 @@ def runTests(sampleData):
   sampleData: string
     The test data to run the tests on.
   """
-  tokenisedItems = tokeniseText(sampleData)
+  tokenisedItems = tokeniseText(sampleData, "word_native")
   freq = buildFrequencyDistributionData(tokenisedItems)
+  freq.plot(50, cumulative=False) # Plot a frequency graph (first 50 words)
   print("Finding concordance data for word-tokeinsed C")
   dataText = Text(tokenisedItems)
   print("Finding \"include\"")
@@ -85,14 +103,21 @@ def runTests(sampleData):
   print("Finding \"#include\"")
   dataText.concordance("#include")
 
-
+  tokenisedItems = tokeniseText(sampleData, "word_naive_with_spaces")
   print("Finding concordance data for naively-tokenised C")
-  dataText = Text(sampleData.split(" "))
+  dataText = Text(tokenisedItems)
   print("Finding \"include\"")
   dataText.concordance("include")
   print("Finding \"#include\"")
   dataText.concordance("#include")
-  freq.plot(50, cumulative=False) # Plot a frequency graph (first 50 words)
+
+  tokenisedItems = tokeniseText(sampleData, "lexical_analysis")
+  print("Finding concordance data for lexical-analysis-tokenised C")
+  dataText = Text(tokenisedItems)
+  print("Finding \"include\"")
+  dataText.concordance("include")
+  print("Finding \"#include\"")
+  dataText.concordance("#include")
 
 def main():
   """
