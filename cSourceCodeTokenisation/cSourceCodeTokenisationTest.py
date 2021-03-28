@@ -79,11 +79,19 @@ def runTests(sampleData):
   tokenisedItems = tokeniseText(sampleData)
   freq = buildFrequencyDistributionData(tokenisedItems)
   print("Finding concordance data for word-tokeinsed C")
+  dataText = Text(tokenisedItems)
+  print("Finding \"include\"")
+  dataText.concordance("include")
+  print("Finding \"#include\"")
+  dataText.concordance("#include")
 
- #todo
+
   print("Finding concordance data for naively-tokenised C")
   dataText = Text(sampleData.split(" "))
+  print("Finding \"include\"")
   dataText.concordance("include")
+  print("Finding \"#include\"")
+  dataText.concordance("#include")
   freq.plot(50, cumulative=False) # Plot a frequency graph (first 50 words)
 
 def main():
