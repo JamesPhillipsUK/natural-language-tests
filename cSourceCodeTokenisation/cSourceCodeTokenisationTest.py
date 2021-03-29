@@ -14,6 +14,7 @@ Authors
 import nltk # Natural Language Processing Toolkit
 import string # String lib - used to remove punctuation
 from nltk.text import Text # Text class - methods for parsing a text.
+from cLexer import *
 
 # nltk.download() # Open NLTK package Downloader
 
@@ -34,6 +35,7 @@ def lexer(text):
   # TODO: build lexical analyser
   # SEE: https://github.com/gcc-mirror/gcc/blob/master/libcpp/lex.c
   # SEE: https://gcc.gnu.org/onlinedocs/cppinternals/Lexer.html
+  clex = CLexer()
   textList = text.split(" ")
   textList = [y  for x in textList for y in x.split('\n')]
   textList = [y  for x in textList for y in x.split('{')]
