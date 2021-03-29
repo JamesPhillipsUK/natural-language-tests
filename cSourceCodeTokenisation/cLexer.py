@@ -37,16 +37,18 @@ class CLexer:
   ]
 
   def __init__(self):
+    #for words in self.lexicon:
+    #  print(words)
     pass
 
   def wordInLexicon(self, word):
-    for words in lexicon:
+    for words in self.lexicon:
       if (word == words):
         return True
     return False
   
   def addWordToLexicon(self, word):
-    for words in lexicon:
+    for words in self.lexicon:
       if (word == words):
         return False
     lexicon.append(word)
