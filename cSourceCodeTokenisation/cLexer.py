@@ -10,7 +10,30 @@ class CLexer:
     # Keywords added in C99:
     "_Bool", "_Complex", "_Imaginary", "inline", "restrict",
     # Keywords added in C11:
-    "_Alignas", "_Alignof", "_Atomic", "_Generic", "_Noreturn", "_Static_assert", "_Thread_local"
+    "_Alignas", "_Alignof", "_Atomic", "_Generic", "_Noreturn", "_Static_assert", "_Thread_local",
+    # Keywords to be added in C23:
+    "_Decimal32", "_Decimal64", "_Decimal128"
+  ]
+
+  # C has an extra lexicon, only for use in a preprocessor directive.  These must be marked with hash '#' symbols.
+  preprocessorExtendedLexicon = [
+    # Keywords up to C17:
+    "if", "elif", "else", "endif", "ifdef", "ifndef", "define", "undef", "include", "line", "error", "pragma", "defined",
+    # Keywords to be added in C23:
+    "__has_c_attribute"
+  ]
+
+  # C also has another extra lexicon, only for use NOT in a preprocessor directive.
+  nonPreprocessorExtendedLexicon = [
+    # Keywords up to C99:
+    "_Pragma"
+  ]
+  # C also has another final extra lexicon of language extensions.  'asm' and 'fortran' are standard, but some compilers like to be different.
+  compilerSpecificLanguageExtensionLexicon = [
+    # Calling assembly - three common ways of doing it, one is the standard, the other two are what's actually used by compilers.
+    "asm", "__asm", "__asm__",
+    # Please, no.  Just no.
+    "fortran"
   ]
 
   def __init__(self):
