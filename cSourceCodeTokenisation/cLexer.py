@@ -1,6 +1,11 @@
 class CLexer:
+  '''
+  CLexer
 
-  # Start with a lexicon of all valid words in the language, in this case, C Keywords.
+  Basic tools for lexical analysis of the C Programming Language, up to C17 and the proposed standards for C23.
+  '''
+
+  # A lexicon of valid words in the language, in this case, C 'Keywords'.
   lexicon = [
     # Keywords up to C90:
     "auto", "break", "case", "char", "const", "continue", "default", "do",
@@ -37,17 +42,141 @@ class CLexer:
   ]
 
   def __init__(self):
+    '''
+    Constructor for the lexical analyser.
+
+    Parameters
+    ----------
+    self: object
+      The instance of the lexical analyser.
+    '''
     #for words in self.lexicon:
     #  print(words)
     pass
 
-  def wordInLexicon(self, word):
+  def isWordInLexicon(self, word):
+    '''
+    Checks if a given word is in the lexicon.
+
+    Parameters
+    ----------
+    self: object
+      The instance of the lexical analyser.
+    word: string
+      The string which we're checking.
+
+    Returns
+    -------
+    boolean
+      Is the word in the lexicon?
+    '''
     for words in self.lexicon:
       if (word == words):
         return True
     return False
+
+  def isWordInPreprocessorExtendedLexicon(self, word):
+    '''
+    Checks if a given word is in the preprocessor extended lexicon.
+
+    Parameters
+    ----------
+    self: object
+      The instance of the lexical analyser.
+    word: string
+      The string which we're checking.
+
+    Returns
+    -------
+    boolean
+      Is the word in the lexicon?
+    '''
+    for words in self.preprocessorExtendedLexicon:
+      if (word == words):
+        return True
+    return False
+
+  def isWordInNonPreprocessorExtendedLexicon(self, word):
+    '''
+    Checks if a given word is in the non-preprocessor extended lexicon.
+
+    Parameters
+    ----------
+    self: object
+      The instance of the lexical analyser.
+    word: string
+      The string which we're checking.
+
+    Returns
+    -------
+    boolean
+      Is the word in the lexicon?
+    '''
+    for words in self.nonPreprocessorExtendedLexicon:
+      if (word == words):
+        return True
+    return False
+
+  def isWordInCompilerSpecificLanguageExtensionLexicon(self, word):
+    '''
+    Checks if a given word is in the compiler-specific language extension lexicon.
+
+    Parameters
+    ----------
+    self: object
+      The instance of the lexical analyser.
+    word: string
+      The string which we're checking.
+
+    Returns
+    -------
+    boolean
+      Is the word in the lexicon?
+    '''
+    for words in self.compilerSpecificLanguageExtensionLexicon:
+      if (word == words):
+        return True
+    return False
+
+  def isWordInLanguage(self, word):
+    '''
+    Checks if a given word is in any of the lexica.  One method is easier to call than four.
+
+    Parameters
+    ----------
+    self: object
+      The instance of the lexical analyser.
+    word: string
+      The string which we're checking.
+
+    Returns
+    -------
+    boolean
+      Is the word... a word?
+    '''
+    if(self.isWordInLexicon(word) 
+      or self.isWordInPreprocessorExtendedLexicon(word)
+      or self.isWordInNonPreprocessorExtendedLexicon(word)
+      or self.isWordInCompilerSpecificLanguageExtensionLexicon(word)):
+        return True
+    return False
   
   def addWordToLexicon(self, word):
+    '''
+    Adds a given word to the lexicon.  This would be called when a word is #define-d.
+
+    Parameters
+    ----------
+    self: object
+      The instance of the lexical analyser.
+    word: string
+      The string which we're adding.
+
+    Returns
+    -------
+    boolean
+      True if it added, false if it's already in there.
+    '''
     for words in self.lexicon:
       if (word == words):
         return False
