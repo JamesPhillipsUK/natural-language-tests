@@ -44,11 +44,6 @@ class CLexer:
   def __init__(self):
     '''
     Constructor for the lexical analyser.
-
-    Parameters
-    ----------
-    self: object
-      The instance of the lexical analyser.
     '''
     #for words in self.lexicon:
     #  print(words)
@@ -60,8 +55,6 @@ class CLexer:
 
     Parameters
     ----------
-    self: object
-      The instance of the lexical analyser.
     word: string
       The string which we're checking.
 
@@ -81,8 +74,6 @@ class CLexer:
 
     Parameters
     ----------
-    self: object
-      The instance of the lexical analyser.
     word: string
       The string which we're checking.
 
@@ -102,8 +93,6 @@ class CLexer:
 
     Parameters
     ----------
-    self: object
-      The instance of the lexical analyser.
     word: string
       The string which we're checking.
 
@@ -123,8 +112,6 @@ class CLexer:
 
     Parameters
     ----------
-    self: object
-      The instance of the lexical analyser.
     word: string
       The string which we're checking.
 
@@ -144,8 +131,6 @@ class CLexer:
 
     Parameters
     ----------
-    self: object
-      The instance of the lexical analyser.
     word: string
       The string which we're checking.
 
@@ -167,8 +152,6 @@ class CLexer:
 
     Parameters
     ----------
-    self: object
-      The instance of the lexical analyser.
     word: string
       The string which we're adding.
 
@@ -182,3 +165,51 @@ class CLexer:
         return False
     lexicon.append(word)
     return True
+
+  def tokeniseParagraph(self, data):
+    '''
+    Tokenises paragraphs (or in C's case, functions), when given sample data (source code)
+
+    Parameters
+    ----------
+    data: string
+      The text / source code.
+
+    Returns
+    -------
+    list
+      A list of the paragraphs.
+    '''
+    pass
+
+  def tokeniseSentence(self, paragraph):
+    '''
+    Tokenises sentences (or in C's case, commands), when given a sample paragraph (C function)
+
+    Parameters
+    ----------
+    paragraph: string
+      The paragraph / function.
+
+    Returns
+    -------
+    list
+      A list of the sentences.
+    '''
+    pass
+
+  def tokeniseWords(self, sentence):
+    '''
+    Tokenises words, when given a sample sentence (C command)
+
+    Parameters
+    ----------
+    sentence: string
+      The sentence / command.
+
+    Returns
+    -------
+    list
+      A list of the words.
+    '''
+    pass
