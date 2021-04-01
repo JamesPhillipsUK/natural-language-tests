@@ -167,6 +167,9 @@ class CLexer:
     return True
 
   def tokeniseParagraph(self, data):
+    # Remove newlines, they're stylistic not syntactic in c.
+    data = data.replace("\\r\\n", " ")
+    data = data.replace("\\n", " ")
     '''
     Tokenises paragraphs (or in C's case, functions), when given sample data (source code)
 
