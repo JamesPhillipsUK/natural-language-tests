@@ -39,10 +39,11 @@ def lexer(text):
   # SEE: https://cs.wmich.edu/~gupta/teaching/cs4850/sumII06/The%20syntax%20of%20C%20in%20Backus-Naur%20form.htm
   clex = CLexer()
   csyn = CSynter()
-  textList = text.split(" ")
-  textList = [y  for x in textList for y in x.split('\n')]
-  textList = [y  for x in textList for y in x.split('{')]
-  textList = [y  for x in textList for y in x.split('}')]
+  # textList = text.split(" ")
+  # textList = [y  for x in textList for y in x.split('\n')]
+  # textList = [y  for x in textList for y in x.split('{')]
+  # textList = [y  for x in textList for y in x.split('}')]
+  textList = [clex.tokeniseParagraph(text)]
   return textList
 
 def tokeniseText(text, method):
