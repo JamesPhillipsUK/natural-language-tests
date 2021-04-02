@@ -170,6 +170,8 @@ class CLexer:
     # Remove newlines, they're stylistic not syntactic in c.
     data = data.replace("\\r\\n", " ")
     data = data.replace("\\n", " ")
+    # Padding everything out with spaces.  It'll be easier to tokenise in the long run
+    data = " " + data + " "
     '''
     Tokenises paragraphs (or in C's case, functions), when given sample data (source code)
 
