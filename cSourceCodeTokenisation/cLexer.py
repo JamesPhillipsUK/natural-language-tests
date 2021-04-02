@@ -1,3 +1,4 @@
+from cSynter import *
 class CLexer:
   '''
   CLexer
@@ -167,11 +168,19 @@ class CLexer:
     return True
 
   def tokeniseParagraph(self, data):
+    print("DEBUG: Tokenising Paragraph.")
+    csyn = CSynter()
     # Remove newlines, they're stylistic not syntactic in c.
-    data = data.replace("\\r\\n", " ")
-    data = data.replace("\\n", " ")
+    data = data.replace("\r\n", " ")
+    data = data.replace("\n", " ")
+    data = data.replace(" ", " ")
     # Padding everything out with spaces.  It'll be easier to tokenise in the long run
     data = " " + data + " "
+    for symbol in csyn.grammaticalSymbolList:
+      data = data.replace(symbol, " " + symbol + " ")
+    while "  " in data:
+      data = data.replace("  ", " ")
+    print(data)
     '''
     Tokenises paragraphs (or in C's case, functions), when given sample data (source code)
 
