@@ -168,19 +168,6 @@ class CLexer:
     return True
 
   def tokeniseParagraph(self, data):
-    print("DEBUG: Tokenising Paragraph.")
-    csyn = CSynter()
-    # Remove newlines, they're stylistic not syntactic in c.
-    data = data.replace("\r\n", " ")
-    data = data.replace("\n", " ")
-    data = data.replace(" ", " ")
-    # Padding everything out with spaces.  It'll be easier to tokenise in the long run
-    data = " " + data + " "
-    for symbol in csyn.grammaticalSymbolList:
-      data = data.replace(symbol, " " + symbol + " ")
-    while "  " in data:
-      data = data.replace("  ", " ")
-    print(data)
     '''
     Tokenises paragraphs (or in C's case, functions), when given sample data (source code)
 
@@ -194,7 +181,46 @@ class CLexer:
     list
       A list of the paragraphs.
     '''
-    pass
+    print("DEBUG: Tokenising Paragraph.")
+    csyn = CSynter()
+    # Remove newlines, they're stylistic not syntactic in c.
+    data = data.replace("\r\n", " ")
+    data = data.replace("\n", " ")
+    data = data.replace(" ", " ")
+    # Padding everything out with spaces.  It'll be easier to tokenise in the long run
+    data = " " + data + " "
+    for symbol in csyn.grammaticalSymbolList:
+      data = data.replace(symbol, " " + symbol + " ")
+    while "  " in data:
+      data = data.replace("  ", " ")
+    dataArr = data.split()
+    #
+    # Each function is a paragraph
+    # Comments are unnecessary
+    # Each "block" outside a function (define, include, global var, struct) is a paragraph
+    #
+    paragraphs = [] # The list of paragraphs
+    thisParagraph = "" # the current paragraph
+    isHashed = False # #define and #include paragraphs start with a hash
+    isType = False # Functions and global vars start with a type
+    isStruct = False
+    isComment = False
+    indentCount = 0 # Count the number of braces, so that we close the paragraph on the right one.
+    for wordOrSymbol in dataArr:
+      if (wordOrSymbol == "#"):
+        isHashed = True
+      elif (wordOrSymbol == "char" or wordOrSymbol == "signed" or wordOrSymbol == "unsigned" or wordOrSymbol == "short" or wordOrSymbol == "int" or wordOrSymbol == "long" or wordOrSymbol == "float" or wordOrSymbol == "double" or wordOrSymbol == "_Bool"):
+        isType = True
+      elif (wordOrSymbol == "typedef" or wordOrSymbol == "struct"):
+        isStruct = True
+      
+      #Build the current paragraph
+
+      thisParagraph += wordOrSymbol
+    print(data)
+    for paragraph in paragraphs:
+      print(paragraph)
+    return paragraphs
 
   def tokeniseSentence(self, paragraph):
     '''
