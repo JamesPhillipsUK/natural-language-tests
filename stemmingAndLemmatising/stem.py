@@ -23,11 +23,22 @@ import multiprocessing # multithreading
 
 def stemText(text):
   stemmedText = []
-  textArr = nltk.word_tokenize(text)
+  import string
+  noPunctuationText = text.translate(str.maketrans({a:None for a in string.punctuation})) # Strip punctuation
+  tokenisedText = nltk.word_tokenize(noPunctuationText)
+  #Strip any stopwords
+  from nltk.corpus import stopwords
+  stopWords = set(stopwords.words('english'))
+  unstoppedTokens = []
+  for word in tokenisedText:
+    if word not in stopWords and word.lower not in stopWords:
+      unstoppedTokens.append(word)
+  #stem using snowball stemmer
   from nltk.stem import SnowballStemmer
   stemmer = SnowballStemmer("english")
-  for word in textArr:
+  for word in unstoppedTokens:
     stemmedText.append(stemmer.stem(word))
+  
   return stemmedText
 
 def buildFrequencyDistributionData(tokItems):
@@ -88,10 +99,8 @@ def main():
   """
   sampleData = pullText()
   print ("Running.  This may take a while: ")
-  startTime = time.time()
   with multiprocessing.Pool() as pool:
     pool.map(runTests, sampleData)
-  print ("Total multithreaded time: \t", time.time() - startTime)
 
 if __name__ == "__main__":
   main()
