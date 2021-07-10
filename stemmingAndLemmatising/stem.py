@@ -21,7 +21,7 @@ import multiprocessing # multithreading
 
 # nltk.download() # Open NLTK package Downloader
 
-def stemText(text):
+def stemText(text, method):
   stemmedText = []
   import string
   noPunctuationText = text.translate(str.maketrans({a:None for a in string.punctuation})) # Strip punctuation
@@ -33,12 +33,17 @@ def stemText(text):
   for word in tokenisedText:
     if word not in stopWords and word.lower not in stopWords:
       unstoppedTokens.append(word)
-  #stem using snowball stemmer
-  from nltk.stem import SnowballStemmer
-  stemmer = SnowballStemmer("english")
+  
+  if method == "snowball": # stem using Snowball stemmer
+    from nltk.stem import SnowballStemmer
+    stemmer = SnowballStemmer("english")
+  else: # stem using Porter stemmer
+    from nltk.stem import PorterStemmer
+    stemmer = PorterStemmer()
+  
   for word in unstoppedTokens:
     stemmedText.append(stemmer.stem(word))
-  
+
   return stemmedText
 
 def buildFrequencyDistributionData(tokItems):
@@ -82,14 +87,32 @@ def runTests(sampleData):
   sampleData: string
     The test data to run the tests on.
   """
+  import matplotlib.pyplot as plt
+  plt.ion()
+
   startTime = time.time()
-  stemmedText = stemText(sampleData)
-  print ("  Stemming time: \t", time.time() - startTime)
+  stemmedText = stemText(sampleData, "snowball")
+  print ("  Snowball Stemming time: \t", time.time() - startTime)
   startTime = time.time()
   freq = buildFrequencyDistributionData(stemmedText)
   print ("  Frequency Distribution time: \t", time.time() - startTime)
-  print ("  Frequency distribution graph of the top 500 word stems:")
-  freq.plot(500, cumulative=False) # Plot a frequency graph (first 500 words)
+  print ("  Frequency distribution graph of the top 100 word stems:")
+  title = "Stem of: " + sampleData.split("\\r")[0].split("Gutenberg eBook of ")[1]
+  freq.plot(100, cumulative=False, title=title) # Plot a frequency graph (first 100 words)
+  #freq.tabulate(100, cumulative=False, title=title)
+  
+  startTime = time.time()
+  stemmedText = stemText(sampleData, "porter")
+  print ("  Porter Stemming time: \t", time.time() - startTime)
+  startTime = time.time()
+  freq = buildFrequencyDistributionData(stemmedText)
+  print ("  Frequency Distribution time: \t", time.time() - startTime)
+  print ("  Frequency distribution graph of the top 100 word stems:")
+  freq.plot(100, cumulative=False) # Plot a frequency graph (first 100 words)
+  #freq.tabulate(100, cumulative=False, title=title)
+
+  plt.ioff()
+  plt.show()
 
 def main():
   """
