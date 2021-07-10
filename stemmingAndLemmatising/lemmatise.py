@@ -21,7 +21,7 @@ import multiprocessing # multithreading
 
 # nltk.download() # Open NLTK package Downloader
 
-def lemmatiseText(text, method):
+def lemmatiseText(text):
   lemmatisedText = []
   import string
   noPunctuationText = text.translate(str.maketrans({a:None for a in string.punctuation})) # Strip punctuation
@@ -35,9 +35,11 @@ def lemmatiseText(text, method):
       unstoppedTokens.append(word)
   
   #lemmatise here
+  from nltk.stem import WordNetLemmatizer
+  lem = WordNetLemmatizer()
   
-  #for word in unstoppedTokens:
-  #  lemmatisedText.append(stemmer.stem(word))
+  for word in unstoppedTokens:
+    lemmatisedText.append(lem.lemmatize(word))
 
   return lemmatisedText
 
