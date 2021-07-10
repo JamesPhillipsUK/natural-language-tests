@@ -22,11 +22,26 @@ import multiprocessing # multithreading
 # nltk.download() # Open NLTK package Downloader
 
 def stemText(text, method):
+  """
+  This method, given a body of text and a stemming method, will tokenise, remove stopwords, and stem the text.
+  
+  Parameters
+  ----------
+  text: string
+    The text to stem.
+  method: string
+    The method by which to stem.
+    
+  Returns
+  -------
+  list
+    The list of stemmed words.
+  """
   stemmedText = []
   import string
   noPunctuationText = text.translate(str.maketrans({a:None for a in string.punctuation})) # Strip punctuation
   tokenisedText = nltk.word_tokenize(noPunctuationText)
-  #Strip any stopwords
+  # Strip any stopwords
   from nltk.corpus import stopwords
   stopWords = set(stopwords.words('english'))
   unstoppedTokens = []
@@ -118,7 +133,7 @@ def main():
   """
   Entrypoint: gets the data then runs the tests.
   
-  This runs the tests on a single thread, supervised by Python's GIL, then across the whole CPU using the multiprocessing library.
+  This runs the tests across the whole CPU using the multiprocessing library.
   """
   sampleData = pullText()
   print ("Running.  This may take a while: ")

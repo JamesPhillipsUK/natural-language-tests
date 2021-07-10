@@ -22,19 +22,31 @@ import multiprocessing # multithreading
 # nltk.download() # Open NLTK package Downloader
 
 def lemmatiseText(text):
+  """
+  This method, given a body of text, will tokenise, remove stopwords, and lemmatise the text.
+  
+  Parameters
+  ----------
+  text: string
+    The text to stem.
+    
+  Returns
+  -------
+  list
+    The list of lemmata.
+  """
   lemmatisedText = []
   import string
   noPunctuationText = text.translate(str.maketrans({a:None for a in string.punctuation})) # Strip punctuation
   tokenisedText = nltk.word_tokenize(noPunctuationText)
-  #Strip any stopwords
+  # Strip any stopwords
   from nltk.corpus import stopwords
   stopWords = set(stopwords.words('english'))
   unstoppedTokens = []
   for word in tokenisedText:
     if word not in stopWords and word.lower not in stopWords:
       unstoppedTokens.append(word)
-  
-  #lemmatise here
+  # Initialise the lemmatisation
   from nltk.stem import WordNetLemmatizer
   lem = WordNetLemmatizer()
   
@@ -93,7 +105,7 @@ def runTests(sampleData):
   print ("  Frequency distribution graph of the top 100 word lemmata:")
   title = "Lemmata of: " + sampleData.split("\\r")[0].split("Gutenberg eBook of ")[1]
   freq.plot(100, cumulative=False, title=title) # Plot a frequency graph (first 100 words)
-  #freq.tabulate(100, cumulative=False, title=title)
+  freq.tabulate(10, cumulative=False, title=title)
 
 def main():
   """
