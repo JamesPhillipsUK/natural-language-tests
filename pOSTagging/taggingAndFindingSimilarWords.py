@@ -39,6 +39,29 @@ def pOSTagText(text):
   taggedWords = nltk.pos_tag(tokens)
   return taggedWords
 
+def findSimilarWords(corporaString):
+  wordSimilarityTuples = []
+  corporaStringArr = nltk.word_tokenize(corporaString)
+  corpora = nltk.Text(nltk.word_tokenize(corporaString))
+  for word in corporaStringArr:
+    print(word.lower())
+    similarWords = corpora.similar(word.lower())
+    if isinstance(similarWords, str):
+      print(word.lower() + " is similar to: " + corpora.similar(word.lower()))
+      similarWords = corpora.similar(word.lower()) # find words similar to the word
+      wordSimilarityTuples.append((word, similarWords)) # prepare a tuple of the word and the similar ones
+  # add all of those to a file
+  print ("  Setting filepath.")
+  filepath = "Similar Words in " + corporaString.split("\r")[0].split("Book of ")[1] + time.strftime("%Y-%m-%d-%H-%M-%S", time.gmtime()) + "GMT.txt"
+  print ("  Writing file.")
+  filePointer = open(filepath, "w")
+  for data in wordSimilarityTuples:
+    filePointer.write(data[0] + "/" + data[1] + "\n")
+  print ("  Written!")
+  filePointer.close()
+  #
+  pass
+
 def pullText():
   """
   This method uses urllib to pull the test data from Project Gutenberg's online repository.
@@ -66,13 +89,14 @@ def runTests(sampleData):
   taggedText = pOSTagText(sampleData)
   print ("  POS Tagging time: \t", time.time() - startTime)
   print ("  Setting filepath.")
-  filepath = "" + sampleData.split("\r")[0].split("Book of ")[1] + time.strftime("%Y-%m-%d-%H-%M-%S", time.gmtime()) + "GMT.txt"
+  filepath = "POS Tagged " + sampleData.split("\r")[0].split("Book of ")[1] + time.strftime("%Y-%m-%d-%H-%M-%S", time.gmtime()) + "GMT.txt"
   print ("  Writing file.")
   filePointer = open(filepath, "w")
   for data in taggedText:
     filePointer.write(data[0] + "/" + data[1] + "\n")
   print ("  Written!")
   filePointer.close()
+  findSimilarWords(sampleData)
 
 def main():
   """
