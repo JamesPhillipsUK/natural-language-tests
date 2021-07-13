@@ -17,8 +17,8 @@ import urllib # Python Website Crawler
 import time # time library
 import string # String lib - used to remove punctuation
 import multiprocessing # multithreading
-import sys # system library, used to access stdout
-import io # system I/O library, used as above.
+
+stdoutLock = multiprocessing.Lock()
 
 # nltk.download() # Open NLTK package Downloader
 
@@ -42,6 +42,7 @@ def pOSTagText(text):
   return taggedWords
 
 def findSimilarWords(corporaString):
+  stdoutLock.acquire()
   wordSimilarityTuples = []
   corporaStringArr = nltk.word_tokenize(corporaString)
   corpora = nltk.Text(nltk.word_tokenize(corporaString))
@@ -55,6 +56,7 @@ def findSimilarWords(corporaString):
         print("-----\n" + word.upper() + " is similar to: ")
         corpora.similar(word.lower(), 5) # This prints to the screen and doesn't actually return anything.  IKR?!
   print("Done!  See: " + filepath)
+  stdoutLock.release()
 
 def pullText():
   """
@@ -66,8 +68,9 @@ def pullText():
     A list of all of the data from Project Gutenberg in string format.  We load all this straight into memory to save the overhead of grabbing it later.
   """
   theTimeMachine = urllib.request.urlopen(urllib.request.Request(url='https://www.gutenberg.org/files/35/35-0.txt', headers={'User-Agent': 'Mozilla/5.0'}))
-  #lesMis = urllib.request.urlopen(urllib.request.Request(url='https://www.gutenberg.org/files/135/135-0.txt', headers={'User-Agent': 'Mozilla/5.0'}))
-  return [str(theTimeMachine.read().decode('utf8'))]#,str(lesMis.read().decode('utf8'))
+  theIslandOfDoctorMoreau = urllib.request.urlopen(urllib.request.Request(url='https://www.gutenberg.org/files/159/159.txt', headers={'User-Agent': 'Mozilla/5.0'}))
+  lesMis = urllib.request.urlopen(urllib.request.Request(url='https://www.gutenberg.org/files/135/135-0.txt', headers={'User-Agent': 'Mozilla/5.0'}))
+  return [str(theTimeMachine.read().decode('utf8')), str(theIslandOfDoctorMoreau.read().decode('utf8')), str(lesMis.read().decode('utf8'))]
 
 def runTests(sampleData):
   """
