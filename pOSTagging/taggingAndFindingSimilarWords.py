@@ -42,7 +42,15 @@ def pOSTagText(text):
   return taggedWords
 
 def findSimilarWords(corporaString):
-  stdoutLock.acquire()
+  """
+  This method, given a text string containing words, will attempt find similar words to each word in the string, from elsewhere in the string, then output that to the file.
+  
+  Parameters
+  ----------
+  corporaString: string
+    The text to tag.
+  """
+  stdoutLock.acquire() # This is - by nature of taking over stdout - not thread-safe.  Make it so by locking the whole method to a single thread.
   wordSimilarityTuples = []
   corporaStringArr = nltk.word_tokenize(corporaString)
   corpora = nltk.Text(nltk.word_tokenize(corporaString))
@@ -50,8 +58,8 @@ def findSimilarWords(corporaString):
   filepath = "Similar Words in " + corporaString.split("\r")[0].split("Book of ")[1] + time.strftime("%Y-%m-%d-%H-%M-%S", time.gmtime()) + "GMT.txt"
   print("Finding similar words in the corpora.  This may take a while.")
   from contextlib import redirect_stdout
-  with open(filepath, 'w') as filePointer:
-    with redirect_stdout(filePointer):
+  with open(filepath, 'w') as filePointer: # The file to put the similar words in.
+    with redirect_stdout(filePointer): # We have to redirect stdout because Text.similar in NLTK just prints, rather than returning a value.
       for word in corporaStringArr:
         print("-----\n" + word.upper() + " is similar to: ")
         corpora.similar(word.lower(), 5) # This prints to the screen and doesn't actually return anything.  IKR?!
