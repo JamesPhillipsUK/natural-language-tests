@@ -91,7 +91,7 @@ def pullText():
   worksOfShakespeare = urllib.request.urlopen(urllib.request.Request(url='https://www.gutenberg.org/files/100/100-0.txt', headers={'User-Agent': 'Mozilla/5.0'}))
   theTimeMachine = urllib.request.urlopen(urllib.request.Request(url='https://www.gutenberg.org/files/35/35-0.txt', headers={'User-Agent': 'Mozilla/5.0'}))
   lesMis = urllib.request.urlopen(urllib.request.Request(url='https://www.gutenberg.org/files/135/135-0.txt', headers={'User-Agent': 'Mozilla/5.0'}))
-  return [str(kJV.read()),str(worksOfShakespeare.read()),str(theTimeMachine.read()),str(lesMis.read())]
+  return [str(kJV.read().decode('utf8')), str(worksOfShakespeare.read().decode('utf8')), str(theTimeMachine.read().decode('utf8')), str(lesMis.read().decode('utf8'))]
   
 def runTests(sampleData):
   """
@@ -112,7 +112,7 @@ def runTests(sampleData):
   freq = buildFrequencyDistributionData(stemmedText)
   print ("  Frequency Distribution time: \t", time.time() - startTime)
   print ("  Frequency distribution graph of the top 100 word stems:")
-  title = "Stem of: " + sampleData.split("\\r")[0].split("Gutenberg eBook of ")[1]
+  title = "Stem of: " + sampleData.split("\r")[0].split("Gutenberg eBook of ")[1]
   freq.plot(100, cumulative=False, title=title) # Plot a frequency graph (first 100 words)
   #freq.tabulate(100, cumulative=False, title=title)
   
